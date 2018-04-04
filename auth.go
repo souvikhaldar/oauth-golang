@@ -18,6 +18,7 @@ import (
 // AuthenticUserId is the key whose value will be set inside AuthRequired
 const AuthenticUserId = "userid"
 var sessionPassword string
+// This is my own database delagate, you can use your's as well
 var sqldb = db.InitSqlDbDelegate()
 var lastInsertId int64
 var requiredUserID int64
@@ -46,11 +47,11 @@ type User struct {
 
 // Initializing and setting config data
 func init() {
-
+  // I've set ClientID and ClientSecret as environmet variable
   conf = &oauth2.Config {
     ClientID:     os.Getenv("ClientID"),
     ClientSecret: os.Getenv("ClientSecret"),
-    RedirectURL:  "http://kartbites.com:8192/login/social/credentials",
+    RedirectURL:  "provide your custom callback URI here",
     Scopes: []string{
       "https://www.googleapis.com/auth/userinfo.email", // Not sure about this but look-> https://developers.google.com/identity/protocols/googlescopes#google_sign-in
     },
@@ -257,8 +258,8 @@ func FinishSocialAuth(c *gin.Context) {
     c.JSON(http.StatusBadRequest, err)
     return
   }
-  c.SetCookie("data", string(userCookiedataJSON), 15780000, "", "kartbites.com", false, false)
-  c.Redirect(302,"kartbites://screen?name=social&login=true" )
+  c.SetCookie("data", string(userCookiedataJSON), 15780000, "", "domain_name.com", false, false)
+  c.Redirect(302,"wherever you want the user to redirect to" )
   return
 
 }
